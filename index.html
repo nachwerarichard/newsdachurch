@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transition Example</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .aside {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 10%;
+            height: 100vh;
+            background-color: #003B5C; /* Starting background color */
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+            transition: background-color 1.5s ease; /* Transition for background color */
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            transition: filter 0.1s ease; /* Quick transition for filter effect */
+        }
+    </style>
+</head>
+<body>
+    <aside class="aside" id="myAside">
+        <img id="logoImage" src="logo5.png" alt="Logo" class="logo" />
+    </aside>
+    <div class="content">
+        <!-- Your content goes here -->
+        <div style="height: 2000px;">Scroll down to see the effect</div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function adjustSizes() {
+                var windowWidth = $(window).width();
+
+                // Adjust the width of the .aside class based on the window width
+                if (windowWidth < 768) {
+                    $('.aside').css('width', '10%'); // Adjust for small screens
+                } else {
+                    $('.aside').css('width', '10%'); // Default width for larger screens
+                }
+
+                // Adjust the width of the .logo class based on the window width
+                if (windowWidth < 768) {
+                    $('.logo').css('width', '80px'); // Adjust for small screens
+                } else {
+                    $('.logo').css('width', '120px'); // Default width for larger screens
+                }
+            }
+
+            // Call adjustSizes function on page load and window resize
+            adjustSizes();
+            $(window).resize(adjustSizes);
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var $aside = $('#myAside');
+            var $logo = $('#logoImage');
+
+            $aside.hover(function() {
+                $(this).css('background-color', '#003B5C'); // Change background color to blue on hover
+            }, function() {
+                // Restore original background color when not hovered
+                var scrollTop = $(window).scrollTop();
+                var scrollHeight = $(document).height() - $(window).height();
+                var scrollPercent = scrollTop / (scrollHeight * 0.1);
+                var startColor = [0, 59, 92]; // RGB for #003B5C
+                var endColor = [255, 255, 255]; // RGB for #ffffff
+
+                var currentColor = startColor.map(function(start, i) {
+                    return Math.round(start + (endColor[i] - start) * scrollPercent);
+                });
+
+                var currentColorStr = 'rgb(' + currentColor.join(',') + ')';
+
+                $(this).css('background-color', currentColorStr); // Restore original background color
+            });
+
+            $(window).on('scroll', function() {
+                var scrollTop = $(this).scrollTop();
+                var scrollHeight = $(document).height() - $(window).height();
+                var scrollPercent = scrollTop / scrollHeight;
+
+                var startColor = [0, 59, 92]; // RGB for #003B5C
+                var endColor = [255, 255, 255]; // RGB for #ffffff
+
+                var currentColor = startColor.map(function(start, i) {
+                    return Math.round(start + (endColor[i] - start) * scrollPercent);
+                });
+
+                var currentColorStr = 'rgb(' + currentColor.join(',') + ')';
+
+                var logoColor = 'invert(27%) sepia(94%) saturate(486%) hue-rotate(149deg) brightness(91%) contrast(91%)';
+                scrollPercent = Math.min(scrollPercent, 1);
+
+                $aside.css('background-color', currentColorStr);
+                $logo.css('filter', logoColor);
+            });
+        });
+    </script>
+</body>
+</html>

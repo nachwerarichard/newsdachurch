@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transition Example</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .aside {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 10%;
+            height: 100vh;
+            background-color: #003B5C; /* Starting background color */
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+            transition: background-color 1.5s ease; /* Transition for background color */
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            transition: filter 0.1s ease; /* Quick transition for filter effect */
+        }
+    </style>
+</head>
+<body>
+    <aside class="aside" id="myAside">
+        <img id="logoImage" src="logo5.png" alt="Logo" class="logo" />
+    </aside>
+    <div class="content">
+        <!-- Your content goes here -->
+        <div style="height: 2000px;">Scroll down to see the effect</div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+        var $aside = $('#myAside');
+        var $logo = $('#logoImage');
+    
+        $(window).on('scroll', function() {
+            var scrollTop = $(this).scrollTop();
+            var scrollHeight = $(document).height() - $(window).height();
+            var scrollPercent = scrollTop / (scrollHeight * 0.2); // Divide by 10% of the total scrollable height
+    
+            // Background color change from #003B5C to #FFFFFF
+            var startColor = [0, 59, 92]; // RGB for #003B5C
+            var endColor = [255, 255, 255]; // RGB for #ffffff
+    
+            var currentColor = startColor.map(function(start, i) {
+                return Math.round(start + (endColor[i] - start) * scrollPercent);
+            });
+    
+            var currentColorStr = 'rgb(' + currentColor.join(',') + ')';
+    
+            // Change logo to #003B5C immediately on scroll
+            var logoColor = 'invert(27%) sepia(94%) saturate(486%) hue-rotate(149deg) brightness(91%) contrast(91%)';
+    
+            // Limit the scroll percentage to 1 to prevent the transition from continuing after reaching the end
+            scrollPercent = Math.min(scrollPercent, 1);
+    
+            $aside.css('background-color', currentColorStr);
+            $logo.css('filter', logoColor);
+        });
+    });
+    </script>
+</body>
+</html>
+
